@@ -19,7 +19,7 @@ export async function POST(request: Request) {
       return NextResponse.json({ message: 'Champs requis manquants' }, { status: 400 });
     }
 
-    const rendezvous = await prisma.rendezvous.create({
+    const rendezvous = await prisma.rendezVous.create({
       data: {
         fullName: body.fullName,
         email: body.email,

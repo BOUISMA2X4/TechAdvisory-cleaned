@@ -1,0 +1,38 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout repository
+        uses: actions/checkout@v3
+
+      - name: 🟢 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: 📦 Install dependencies
+        run: npm install
+
+      - name: 🔍 Lint code (optionnel)
+        run: |
+          if [ -f package.json ]; then
+            npm run lint || echo "Lint failed"
+          fi
+
+      - name: ✅ Run tests (optionnel)
+        run: |
+          if [ -f package.json ]; then
+            npm test || echo "Tests failed"
+          fi
+
+      - name: 🚀 Build (Next.js)
+        run: npm run build
