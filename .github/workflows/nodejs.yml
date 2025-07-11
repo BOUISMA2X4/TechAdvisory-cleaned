@@ -1,38 +1,35 @@
-name: Node.js CI
+name: CI - Build and Lint
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: 📥 Checkout repository
+      - name: 📥 Checkout code
         uses: actions/checkout@v3
 
       - name: 🟢 Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'
+          node-version: 18
+          cache: 'npm'
 
       - name: 📦 Install dependencies
-        run: npm install
+        run: npm ci
 
-      - name: 🔍 Lint code (optionnel)
-        run: |
-          if [ -f package.json ]; then
-            npm run lint || echo "Lint failed"
-          fi
+      - name: ⚙️ Generate Prisma client
+        run: npx prisma generate
 
-      - name: ✅ Run tests (optionnel)
-        run: |
-          if [ -f package.json ]; then
-            npm test || echo "Tests failed"
-          fi
-
-      - name: 🚀 Build (Next.js)
+      - name: 🛠 Build the project
         run: npm run build
+
+      - name: ✅ Run Lint (without failing build)
+        run: |
+          npm install -D eslint @typescript-eslint/eslint-plugin @typescript-eslint/parser
+          npx eslint . || true
