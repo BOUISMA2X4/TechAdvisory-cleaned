@@ -1,205 +1,274 @@
-'use client';
+"use client"
 
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import React from "react"
+import { useState } from "react"
+import { motion } from "framer-motion"
+import { Input } from "@/components/ui/input"
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import { Label } from "@/components/ui/label"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { AnimatedGradientBackground } from "@/components/animated-gradient-background" // Assurez-vous que ce fichier existe
 
 export default function RendezVousPage() {
   const [formData, setFormData] = useState({
-    fullName: '',
-    email: '',
-    company: '',
-    position: '',
-    statut: '',
-    projectType: '',
-    preferredDate: '',
-    preferredTime: '',
-    message: '',
-  });
+    fullName: "",
+    email: "",
+    company: "",
+    position: "",
+    statut: "",
+    projectType: "",
+    preferredDate: "",
+    preferredTime: "",
+    message: "",
+  })
+  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle")
 
-  const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+  const statuts = ["Ingénieur", "Étudiant", "Manager", "Entrepreneur", "Autre"]
+  const projectTypes = ["IA", "Développement Logiciel", "Cybersécurité", "DevOps & Cloud", "Autre"]
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement> | string, // string for Select
+    name?: string, // name for Select
   ) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
+    if (typeof e === "string" && name) {
+      setFormData({ ...formData, [name]: e })
+    } else if (typeof e === "object" && "target" in e) {
+      setFormData({ ...formData, [e.target.name]: e.target.value })
+    }
+  }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setStatus('loading');
+    e.preventDefault()
+    setStatus("loading")
     try {
-      const res = await fetch('/api/form', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      const res = await fetch("/api/rendezvous", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
-      });
+      })
       if (res.ok) {
-        setStatus('success');
+        setStatus("success")
         setFormData({
-          fullName: '',
-          email: '',
-          company: '',
-          position: '',
-          statut: '',
-          projectType: '',
-          preferredDate: '',
-          preferredTime: '',
-          message: '',
-        });
-      } else throw new Error('Erreur');
-    } catch {
-      setStatus('error');
+          fullName: "",
+          email: "",
+          company: "",
+          position: "",
+          statut: "",
+          projectType: "",
+          preferredDate: "",
+          preferredTime: "",
+          message: "",
+        })
+      } else {
+        throw new Error("Erreur lors de l'envoi du message.")
+      }
+    } catch (error) {
+      console.error("Submission error:", error)
+      setStatus("error")
     }
-  };
+  }
 
   // Reset status message after 5 seconds
-  useEffect(() => {
-    if (status === 'success' || status === 'error') {
-      const timer = setTimeout(() => setStatus('idle'), 5000);
-      return () => clearTimeout(timer);
+  React.useEffect(() => {
+    if (status === "success" || status === "error") {
+      const timer = setTimeout(() => setStatus("idle"), 5000)
+      return () => clearTimeout(timer)
     }
-  }, [status]);
+  }, [status])
 
   return (
-    <main className="min-h-screen bg-gradient-to-tr from-gray-900 via-gray-800 to-gray-900 py-20 px-6 flex items-center justify-center">
-      <div className="w-full max-w-3xl bg-gray-900/95 backdrop-blur-md border border-gray-700 rounded-2xl shadow-lg p-10 text-gray-200 font-sans">
-        <motion.h1
-          className="text-4xl font-extrabold text-center text-white mb-8 tracking-tight"
-          initial={{ opacity: 0, y: -40 }}
+    <main className="relative min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+      {/* Background SaaS motion */}
+      <AnimatedGradientBackground className="from-gray-950 via-gray-800 to-gray-950" />
+
+      <div className="relative z-10 w-full max-w-3xl mx-auto">
+        <motion.div
+          className="text-center mb-12"
+          initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
         >
-          Demande de Rendez-vous
-        </motion.h1>
+          <h1 className="text-4xl md:text-5xl font-extrabold text-white mb-4">
+            Demande de <span className="text-blue-400">Rendez-vous</span>
+          </h1>
+          <p className="text-gray-300 text-lg md:text-xl max-w-2xl mx-auto">
+            Remplissez ce formulaire pour organiser un échange avec nos experts. Nous traitons votre demande avec soin.
+          </p>
+        </motion.div>
 
-        <p className="text-center text-gray-400 mb-12 max-w-lg mx-auto">
-          Remplissez ce formulaire pour organiser un échange avec nos experts. Nous traitons votre demande avec soin.
-        </p>
-
-        <form onSubmit={handleSubmit} className="space-y-6">
-          <input
-            type="text"
-            name="fullName"
-            placeholder="Nom complet *"
-            value={formData.fullName}
-            onChange={handleChange}
-            required
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-
-          <input
-            type="email"
-            name="email"
-            placeholder="Adresse email professionnelle *"
-            value={formData.email}
-            onChange={handleChange}
-            required
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-
-          <input
-            type="text"
-            name="company"
-            placeholder="Nom de l'entreprise (optionnel)"
-            value={formData.company}
-            onChange={handleChange}
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-
-          <input
-            type="text"
-            name="position"
-            placeholder="Poste occupé (optionnel)"
-            value={formData.position}
-            onChange={handleChange}
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
-
-          {/* Nouveau champ Statut */}
-          <select
-            name="statut"
-            value={formData.statut}
-            onChange={handleChange}
-            required
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          >
-            <option value="" disabled>Statut *</option>
-            <option value="Ingénieur">Ingénieur</option>
-            <option value="Étudiant">Étudiant</option>
-            <option value="Autre">Autre</option>
-          </select>
-
-          <select
-            name="projectType"
-            value={formData.projectType}
-            onChange={handleChange}
-            required
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          >
-            <option value="" disabled>Type de projet *</option>
-            <option value="IA">Intelligence Artificielle</option>
-            <option value="Développement">Développement Logiciel</option>
-            <option value="Cybersécurité">Cybersécurité</option>
-            <option value="DevOps">DevOps & Cloud</option>
-            <option value="Autre">Autre</option>
-          </select>
-
-          <div className="flex flex-col md:flex-row gap-6">
-            <input
-              type="date"
-              name="preferredDate"
-              value={formData.preferredDate}
+        <motion.form
+          onSubmit={handleSubmit}
+          className="bg-gray-900/90 backdrop-blur-lg rounded-2xl p-8 md:p-10 border border-gray-700 shadow-2xl space-y-6"
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          <div>
+            <Label htmlFor="fullName">Nom complet</Label>
+            <Input
+              id="fullName"
+              name="fullName"
+              placeholder="Votre nom complet"
+              value={formData.fullName}
               onChange={handleChange}
               required
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-            />
-            <input
-              type="time"
-              name="preferredTime"
-              value={formData.preferredTime}
-              onChange={handleChange}
-              required
-              className="flex-1 bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
+              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
             />
           </div>
 
-          <textarea
-            name="message"
-            placeholder="Dites-nous plus sur votre besoin..."
-            value={formData.message}
-            onChange={handleChange}
-            rows={5}
-            className="w-full bg-gray-800 border border-gray-700 rounded-lg px-5 py-4 placeholder-gray-500 text-white resize-none focus:outline-none focus:ring-2 focus:ring-blue-500 transition"
-          />
+          <div>
+            <Label htmlFor="email">Adresse email professionnelle</Label>
+            <Input
+              id="email"
+              name="email"
+              type="email"
+              placeholder="votre.email@entreprise.com"
+              value={formData.email}
+              onChange={handleChange}
+              required
+              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+            />
+          </div>
 
-          <motion.button
-            type="submit"
-            whileTap={{ scale: 0.97 }}
-            disabled={status === 'loading'}
-            className="w-full bg-blue-600 hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold text-lg rounded-lg py-4 shadow-md transition"
-          >
-            {status === 'loading' ? 'Envoi en cours...' : 'Prendre rendez-vous'}
-          </motion.button>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="company">Nom de l'entreprise (optionnel)</Label>
+              <Input
+                id="company"
+                name="company"
+                placeholder="Nom de l'entreprise"
+                value={formData.company}
+                onChange={handleChange}
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <Label htmlFor="position">Poste occupé (optionnel)</Label>
+              <Input
+                id="position"
+                name="position"
+                placeholder="Votre poste"
+                value={formData.position}
+                onChange={handleChange}
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
 
-          {status === 'success' && (
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="statut">Statut</Label>
+              <Select
+                name="statut"
+                value={formData.statut}
+                onValueChange={(value) => handleChange(value, "statut")}
+                required
+              >
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white focus:ring-blue-500">
+                  <SelectValue placeholder="Choisissez votre statut" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                  {statuts.map((s) => (
+                    <SelectItem key={s} value={s} className="focus:bg-gray-700">
+                      {s}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="projectType">Type de projet</Label>
+              <Select
+                name="projectType"
+                value={formData.projectType}
+                onValueChange={(value) => handleChange(value, "projectType")}
+                required
+              >
+                <SelectTrigger className="w-full bg-gray-800 border-gray-700 text-white focus:ring-blue-500">
+                  <SelectValue placeholder="Choisissez le type de projet" />
+                </SelectTrigger>
+                <SelectContent className="bg-gray-800 border-gray-700 text-white">
+                  {projectTypes.map((pt) => (
+                    <SelectItem key={pt} value={pt} className="focus:bg-gray-700">
+                      {pt}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="preferredDate">Date préférée</Label>
+              <Input
+                id="preferredDate"
+                name="preferredDate"
+                type="date"
+                value={formData.preferredDate}
+                onChange={handleChange}
+                required
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+              />
+            </div>
+            <div>
+              <Label htmlFor="preferredTime">Heure préférée</Label>
+              <Input
+                id="preferredTime"
+                name="preferredTime"
+                type="time"
+                value={formData.preferredTime}
+                onChange={handleChange}
+                required
+                className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 focus:ring-blue-500"
+              />
+            </div>
+          </div>
+
+          <div>
+            <Label htmlFor="message">Dites-nous plus sur votre besoin</Label>
+            <Textarea
+              id="message"
+              name="message"
+              placeholder="Décrivez votre besoin, vos objectifs, et toute information pertinente pour notre échange."
+              rows={5}
+              value={formData.message}
+              onChange={handleChange}
+              className="bg-gray-800 border-gray-700 text-white placeholder-gray-500 resize-y focus:ring-blue-500"
+            />
+          </div>
+
+          <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.4, duration: 0.5 }}>
+            <Button
+              type="submit"
+              className="w-full py-3 text-lg font-semibold bg-blue-600 hover:bg-blue-700 text-white shadow-lg hover:shadow-xl transition-all duration-300"
+              disabled={status === "loading"}
+            >
+              {status === "loading" ? "Envoi en cours..." : "Prendre rendez-vous"}
+            </Button>
+          </motion.div>
+
+          {status === "success" && (
             <motion.p
-              className="text-green-400 text-center mt-4 font-medium"
+              className="text-green-400 text-center font-medium mt-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              ✅ Votre demande a été envoyée avec succès.
+              ✅ Votre demande a été envoyée avec succès. Nous vous contacterons sous peu.
             </motion.p>
           )}
-          {status === 'error' && (
+          {status === "error" && (
             <motion.p
-              className="text-red-500 text-center mt-4 font-medium"
+              className="text-red-500 text-center font-medium mt-4"
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
             >
-              ❌ Une erreur est survenue. Veuillez réessayer.
+              ❌ Une erreur est survenue lors de l'envoi. Veuillez réessayer.
             </motion.p>
           )}
-        </form>
+        </motion.form>
       </div>
     </main>
-  );
+  )
 }

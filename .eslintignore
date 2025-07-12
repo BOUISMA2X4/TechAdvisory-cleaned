@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+.next/
+out/
+
+# Generated files
+src/generated/
+**/prisma/generated/
+**/*.generated.*
+**/wasm*.js
+**/runtime/
+
+# Build outputs
+dist/
+build/
+
+# Environment files
+.env*
+
+# Logs
+*.log
+# Vos dossiers avec beaucoup de code legacy
+src/legacy/
+src/old-components/
+lib/utils/
+# etc.
