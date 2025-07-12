@@ -52,10 +52,10 @@ export default function HeroSection() {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-gray-950 text-white">
       {/* Cursor Follower */}
       <motion.div
-        className="fixed top-0 left-0 w-6 h-6 bg-blue-500/20 rounded-full pointer-events-none z-50 mix-blend-multiply"
+        className="fixed top-0 left-0 w-6 h-6 bg-blue-500/30 rounded-full pointer-events-none z-50 mix-blend-screen"
         animate={{
           x: mousePosition.x - 12,
           y: mousePosition.y - 12,
@@ -68,7 +68,7 @@ export default function HeroSection() {
         {/* Gradient Orbs */}
         <motion.div
           style={{ y: y1 }}
-          className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-400/30 to-purple-400/30 rounded-full blur-3xl"
+          className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-600/20 to-purple-600/20 rounded-full blur-3xl"
           animate={{
             scale: [1, 1.2, 1],
             rotate: [0, 180, 360],
@@ -81,7 +81,7 @@ export default function HeroSection() {
         />
         <motion.div
           style={{ y: y2 }}
-          className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-cyan-400/30 to-pink-400/30 rounded-full blur-3xl"
+          className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-cyan-600/20 to-pink-600/20 rounded-full blur-3xl"
           animate={{
             scale: [1.2, 1, 1.2],
             rotate: [360, 180, 0],
@@ -93,7 +93,7 @@ export default function HeroSection() {
           }}
         />
         {/* Grid Pattern */}
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.03)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.03)_1px,transparent_1px)] bg-[size:60px_60px]" />
+        <div className="absolute inset-0 bg-[linear-gradient(rgba(59,130,246,0.01)_1px,transparent_1px),linear-gradient(90deg,rgba(59,130,246,0.01)_1px,transparent_1px)] bg-[size:60px_60px]" />
         {/* Floating Elements */}
         {particlePositions.map(
           (
@@ -102,7 +102,7 @@ export default function HeroSection() {
           ) => (
             <motion.div
               key={i}
-              className="absolute w-2 h-2 bg-blue-500/20 rounded-full"
+              className="absolute w-2 h-2 bg-blue-400/30 rounded-full"
               style={{
                 left: particle.left,
                 top: particle.top,
@@ -123,39 +123,48 @@ export default function HeroSection() {
       </div>
 
       {/* Hero Content */}
-      <div className="relative z-10 max-w-7xl mx-auto px-6 text-center">
+      <div className="relative z-10 max-w-7xl mx-auto px-6 py-24 text-center">
         <motion.div initial="hidden" animate="visible" variants={containerVariants} className="space-y-8">
           {/* Badge */}
           <motion.div variants={itemVariants} className="flex justify-center">
-            <div className="inline-flex items-center space-x-2 bg-blue-50 border border-blue-200 rounded-full px-4 py-2 text-sm font-medium text-blue-700">
-              <Sparkles className="w-4 h-4" />
+            <div className="inline-flex items-center space-x-2 bg-blue-900/30 border border-blue-700/50 rounded-full px-4 py-2 text-sm font-medium text-blue-200 backdrop-blur-sm">
+              <Sparkles className="w-4 h-4 text-blue-400" />
               <span>Nouvelle génération de conseil tech</span>
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
             </div>
           </motion.div>
+
           {/* Main Title */}
-          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl lg:text-8xl font-bold leading-tight">
-            <span className="bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+          <motion.h1
+            variants={itemVariants}
+            className="text-5xl md:text-7xl lg:text-8xl font-extrabold leading-tight tracking-tighter"
+          >
+            <span className="bg-gradient-to-r from-gray-50 via-blue-400 to-purple-400 bg-clip-text text-transparent">
               Nouvelle Techno
             </span>
             <br />
-            <span className="bg-gradient-to-r from-blue-600 to-cyan-600 bg-clip-text text-transparent">Advisory</span>
+            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Advisory</span>
           </motion.h1>
+
           {/* Subtitle */}
           <motion.p
             variants={itemVariants}
-            className="text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto leading-relaxed"
+            className="text-lg md:text-xl text-gray-300 max-w-4xl mx-auto leading-relaxed"
           >
             Transformez votre vision en réalité digitale avec notre expertise en{" "}
-            <span className="text-blue-600 font-semibold">IA</span>,{" "}
-            <span className="text-purple-600 font-semibold">innovation</span> et{" "}
-            <span className="text-cyan-600 font-semibold">stratégie tech</span>
+            <span className="text-blue-400 font-semibold">IA</span>,{" "}
+            <span className="text-purple-400 font-semibold">innovation</span> et{" "}
+            <span className="text-cyan-400 font-semibold">stratégie tech</span>
           </motion.p>
+
           {/* CTA Buttons */}
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+          <motion.div
+            variants={itemVariants}
+            className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4"
+          >
             <Link
               href="/forme"
-              className="group relative overflow-hidden bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:scale-105"
+              className="group relative overflow-hidden bg-gradient-to-r from-green-500 to-teal-500 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-green-500/30 hover:scale-105"
             >
               <span className="relative z-10 flex items-center space-x-2">
                 <span>Prenez rendez-vous</span>
@@ -170,7 +179,7 @@ export default function HeroSection() {
             </Link>
             <Link
               href="/chatbot"
-              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-2xl font-semibold text-lg transition-all duration-300 hover:shadow-2xl hover:scale-105"
+              className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-105"
             >
               <span className="relative z-10 flex items-center space-x-2">
                 <Brain className="w-5 h-5" />
@@ -186,33 +195,43 @@ export default function HeroSection() {
             </Link>
             <Link
               href="/contact"
-              className="group flex items-center space-x-2 text-gray-700 hover:text-blue-600 font-medium text-lg transition-colors duration-200"
+              className="group flex items-center space-x-2 text-gray-300 hover:text-blue-400 font-medium text-lg transition-colors duration-200 px-4 py-2 rounded-full border border-gray-700 hover:border-blue-400"
             >
-              <div className="w-12 h-12 bg-gray-100 rounded-full flex items-center justify-center group-hover:bg-blue-50 transition-colors">
-                <Play className="w-5 h-5 ml-1" />
+              <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-blue-900 transition-colors">
+                <Play className="w-5 h-5 ml-1 text-gray-400 group-hover:text-blue-400" />
               </div>
               <span>Découvrir nos services</span>
             </Link>
           </motion.div>
+
           {/* Stats */}
-          <motion.div variants={itemVariants} className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-4xl mx-auto">
+          <motion.div
+            variants={itemVariants}
+            className="grid grid-cols-2 md:grid-cols-4 gap-8 pt-16 max-w-5xl mx-auto bg-white/5 backdrop-blur-sm rounded-2xl p-8 border border-gray-800 shadow-xl"
+          >
             {[
               { number: "500+", label: "Projets réalisés", icon: Rocket },
               { number: "98%", label: "Satisfaction client", icon: Star },
               { number: "50+", label: "Experts certifiés", icon: Award },
               { number: "24/7", label: "Support dédié", icon: Shield },
             ].map((stat, index) => (
-              <motion.div key={index} whileHover={{ scale: 1.05 }} className="text-center group cursor-pointer">
-                <div className="w-16 h-16 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg transition-shadow">
-                  <stat.icon className="w-8 h-8 text-blue-600" />
+              <motion.div
+                key={index}
+                whileHover={{ scale: 1.05, y: -5 }}
+                transition={{ type: "spring", stiffness: 300, damping: 20 }}
+                className="text-center group cursor-pointer p-4 rounded-xl bg-gray-900/50 hover:bg-gray-800/70 transition-all duration-200"
+              >
+                <div className="w-16 h-16 bg-gradient-to-r from-blue-800/30 to-purple-800/30 rounded-full flex items-center justify-center mx-auto mb-3 group-hover:shadow-lg group-hover:shadow-blue-500/20 transition-shadow">
+                  <stat.icon className="w-8 h-8 text-blue-400" />
                 </div>
-                <div className="text-3xl font-bold text-gray-900">{stat.number}</div>
-                <div className="text-sm text-gray-600">{stat.label}</div>
+                <div className="text-3xl font-bold text-white">{stat.number}</div>
+                <div className="text-sm text-gray-400">{stat.label}</div>
               </motion.div>
             ))}
           </motion.div>
         </motion.div>
       </div>
+
       {/* Scroll Indicator */}
       <motion.div
         initial={{ opacity: 0 }}
@@ -223,7 +242,7 @@ export default function HeroSection() {
         <motion.div
           animate={{ y: [0, 10, 0] }}
           transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
-          className="w-6 h-10 border-2 border-gray-300 rounded-full flex justify-center"
+          className="w-6 h-10 border-2 border-gray-600 rounded-full flex justify-center"
         >
           <div className="w-1 h-3 bg-gray-400 rounded-full mt-2" />
         </motion.div>

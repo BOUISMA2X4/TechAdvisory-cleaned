@@ -32,7 +32,9 @@ export default function Navbar() {
     <header
       className={clsx(
         "sticky top-0 z-50 w-full backdrop-blur-xl transition-all duration-300",
-        isScrolled ? "shadow-lg bg-white/90 border-b border-gray-200/50" : "bg-white/95",
+        isScrolled
+          ? "shadow-lg bg-gray-900/80 border-b border-gray-800/50" // Fond plus sombre au scroll
+          : "bg-gray-950/80", // Fond sombre par défaut
       )}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-6 py-4">
@@ -46,17 +48,21 @@ export default function Navbar() {
               <Brain className="w-5 h-5 text-white" />
             </motion.div>
             <motion.div
-              className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-white"
+              className="absolute -top-1 -right-1 w-3 h-3 bg-green-500 rounded-full border-2 border-gray-950" // Bordure adaptée au fond sombre
               animate={{ scale: [1, 1.2, 1] }}
               transition={{ duration: 2, repeat: Number.POSITIVE_INFINITY }}
             />
           </div>
           <div className="hidden sm:block">
-            <h1 className="text-xl font-bold bg-gradient-to-r from-gray-900 via-blue-800 to-purple-800 bg-clip-text text-transparent">
+            <h1 className="text-xl font-bold bg-gradient-to-r from-gray-50 via-blue-400 to-purple-400 bg-clip-text text-transparent">
+              {" "}
+              {/* Dégradé de texte adapté au fond sombre */}
               Nouvelle Techno Advisory
             </h1>
-            <p className="text-xs text-gray-500 flex items-center space-x-1">
-              <Sparkles className="w-3 h-3" />
+            <p className="text-xs text-gray-400 flex items-center space-x-1">
+              {" "}
+              {/* Texte plus clair */}
+              <Sparkles className="w-3 h-3 text-blue-400" />
               <span>Innovation & Conseil</span>
             </p>
           </div>
@@ -71,25 +77,24 @@ export default function Navbar() {
                 <Link
                   href={link.href}
                   className={clsx(
-                    "relative flex items-center space-x-2 px-4 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group",
+                    "relative flex items-center space-x-2 px-4 py-2.5 rounded-full text-sm font-medium transition-all duration-200 group", // Rounded-full pour cohérence
                     isActive
-                      ? "text-blue-700 bg-blue-50 shadow-sm"
-                      : "text-gray-700 hover:text-blue-700 hover:bg-gray-50",
+                      ? "text-blue-400 bg-white/10 shadow-inner border border-blue-700/50" // Style actif amélioré
+                      : "text-gray-300 hover:text-blue-400 hover:bg-white/5", // Style inactif amélioré
                   )}
                 >
                   <link.icon
                     className={clsx(
                       "w-4 h-4 transition-colors duration-200",
-                      isActive ? "text-blue-600" : "text-gray-500 group-hover:text-blue-600",
+                      isActive ? "text-blue-400" : "text-gray-500 group-hover:text-blue-400",
                     )}
                   />
                   <span>{link.name}</span>
-
                   {/* Active indicator */}
                   {isActive && (
                     <motion.div
                       layoutId="activeTab"
-                      className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl border border-blue-200"
+                      className="absolute inset-0 bg-gradient-to-r from-blue-700/20 to-purple-700/20 rounded-full border border-blue-600/50" // Dégradé et bordure pour l'indicateur actif
                       initial={false}
                       transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
                     />
@@ -104,7 +109,7 @@ export default function Navbar() {
         <div className="hidden md:flex items-center space-x-4">
           <Link
             href="/chatbot"
-            className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-xl font-medium text-sm transition-all duration-300 hover:shadow-lg hover:scale-105"
+            className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-105" // Rounded-full et ombre cohérente
           >
             <span className="relative z-10 flex items-center space-x-2">
               <MessageCircle className="w-4 h-4" />
@@ -123,7 +128,7 @@ export default function Navbar() {
         <motion.button
           whileTap={{ scale: 0.95 }}
           onClick={() => setIsOpen(!isOpen)}
-          className="lg:hidden p-2 rounded-xl bg-gray-100 hover:bg-gray-200 transition-colors duration-200"
+          className="lg:hidden p-2 rounded-xl bg-gray-800 hover:bg-gray-700 transition-colors duration-200" // Couleurs adaptées au thème sombre
         >
           <AnimatePresence mode="wait">
             {isOpen ? (
@@ -134,7 +139,7 @@ export default function Navbar() {
                 exit={{ rotate: 90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <X className="w-5 h-5 text-gray-700" />
+                <X className="w-5 h-5 text-gray-300" /> {/* Icône plus claire */}
               </motion.div>
             ) : (
               <motion.div
@@ -144,7 +149,7 @@ export default function Navbar() {
                 exit={{ rotate: -90, opacity: 0 }}
                 transition={{ duration: 0.2 }}
               >
-                <Menu className="w-5 h-5 text-gray-700" />
+                <Menu className="w-5 h-5 text-gray-300" /> {/* Icône plus claire */}
               </motion.div>
             )}
           </AnimatePresence>
@@ -159,7 +164,7 @@ export default function Navbar() {
             animate={{ opacity: 1, height: "auto" }}
             exit={{ opacity: 0, height: 0 }}
             transition={{ duration: 0.3, ease: "easeInOut" }}
-            className="lg:hidden bg-white/95 backdrop-blur-xl border-t border-gray-200/50"
+            className="lg:hidden bg-gray-900/95 backdrop-blur-xl border-t border-gray-800/50" // Fond et bordure adaptés
           >
             <div className="px-6 py-4 space-y-2">
               {links.map((link, index) => {
@@ -177,15 +182,15 @@ export default function Navbar() {
                       className={clsx(
                         "flex items-center space-x-3 px-4 py-3 rounded-xl text-sm font-medium transition-all duration-200",
                         isActive
-                          ? "text-blue-700 bg-blue-50 shadow-sm"
-                          : "text-gray-700 hover:text-blue-700 hover:bg-gray-50",
+                          ? "text-blue-400 bg-white/10 shadow-sm" // Style actif amélioré
+                          : "text-gray-300 hover:text-blue-400 hover:bg-white/5", // Style inactif amélioré
                       )}
                     >
-                      <link.icon className={clsx("w-4 h-4", isActive ? "text-blue-600" : "text-gray-500")} />
+                      <link.icon className={clsx("w-4 h-4", isActive ? "text-blue-400" : "text-gray-500")} />
                       <span>{link.name}</span>
                       {isActive && (
                         <motion.div
-                          className="ml-auto w-2 h-2 bg-blue-600 rounded-full"
+                          className="ml-auto w-2 h-2 bg-blue-400 rounded-full" // Couleur adaptée
                           initial={{ scale: 0 }}
                           animate={{ scale: 1 }}
                           transition={{ delay: 0.2 }}
@@ -195,18 +200,17 @@ export default function Navbar() {
                   </motion.div>
                 )
               })}
-
               {/* Mobile CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="pt-4 border-t border-gray-200"
+                className="pt-4 border-t border-gray-800" // Bordure adaptée
               >
                 <Link
                   href="/chatbot"
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-xl font-medium text-sm hover:shadow-lg transition-all duration-300"
+                  className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-full font-medium text-sm hover:shadow-lg transition-all duration-300" // Rounded-full et ombre cohérente
                 >
                   <MessageCircle className="w-4 h-4" />
                   <span>Essayer l'Assistant IA</span>

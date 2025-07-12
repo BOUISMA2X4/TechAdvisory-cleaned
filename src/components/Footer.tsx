@@ -1,76 +1,182 @@
-'use client';
+"use client"
 
-import { FaLinkedin, FaTwitter, FaEnvelope } from 'react-icons/fa';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from "react" // Import useState and useEffect
+import { Linkedin, Twitter, Mail } from "lucide-react"
+import { motion } from "framer-motion"
+import Link from "next/link"
+import { Input } from "@/components/ui/input"
+import { Button } from "@/components/ui/button"
 
 export default function Footer() {
+  const [currentYear, setCurrentYear] = useState(2023) // Initialisez avec une année par défaut
+
+  useEffect(() => {
+    // Mettez à jour l'année uniquement côté client après l'hydratation
+    setCurrentYear(new Date().getFullYear())
+  }, [])
+
+  const iconVariants = {
+    hover: { scale: 1.1, color: "#60A5FA" }, // Tailwind blue-400
+    tap: { scale: 0.95 },
+  }
+
   return (
-    <footer className="bg-gray-900 text-gray-200 pt-16 pb-10 px-6">
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
-        
+    <footer className="bg-gradient-to-br from-gray-900 to-black text-gray-300 pt-16 pb-10 px-6 relative overflow-hidden">
+      {/* Subtle background pattern/gradient overlay */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none">
+        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
+          <defs>
+            <pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse">
+              <path d="M 10 0 L 0 0 L 0 10" fill="none" stroke="currentColor" strokeWidth="0.1" />
+            </pattern>
+          </defs>
+          <rect width="100%" height="100%" fill="url(#grid)" className="text-gray-700" />
+        </svg>
+      </div>
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
         {/* Logo + Description */}
-        <div>
-          <h3 className="text-2xl font-bold text-white mb-4">TechAdvisory</h3>
-          <p className="text-sm text-gray-400 mb-4">
-            Cabinet SaaS de conseil en technologies numériques. Nous accompagnons votre croissance avec des solutions cloud innovantes.
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <h3 className="text-3xl font-extrabold text-white mb-4 tracking-tight">TechAdvisory</h3>
+          <p className="text-sm text-gray-400 mb-4 leading-relaxed">
+            Cabinet SaaS de conseil en technologies numériques. Nous accompagnons votre croissance avec des solutions
+            cloud innovantes.
           </p>
-          <div className="flex space-x-4 mt-4">
-            <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-              <FaLinkedin className="text-xl hover:text-blue-400 transition" />
-            </a>
-            <a href="https://twitter.com" target="_blank" rel="noopener noreferrer">
-              <FaTwitter className="text-xl hover:text-blue-400 transition" />
-            </a>
-            <a href="mailto:contact@techadvisory.com">
-              <FaEnvelope className="text-xl hover:text-blue-400 transition" />
-            </a>
+          <div className="flex space-x-5 mt-6">
+            <motion.a
+              href="https://linkedin.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={iconVariants}
+              whileHover="hover"
+              whileTap="tap"
+              className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+              aria-label="LinkedIn"
+            >
+              <Linkedin className="text-2xl" />
+            </motion.a>
+            <motion.a
+              href="https://twitter.com"
+              target="_blank"
+              rel="noopener noreferrer"
+              variants={iconVariants}
+              whileHover="hover"
+              whileTap="tap"
+              className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+              aria-label="Twitter"
+            >
+              <Twitter className="text-2xl" />
+            </motion.a>
+            <motion.a
+              href="mailto:contact@techadvisory.com"
+              variants={iconVariants}
+              whileHover="hover"
+              whileTap="tap"
+              className="text-gray-400 hover:text-blue-400 transition-colors duration-300"
+              aria-label="Email"
+            >
+              <Mail className="text-2xl" />
+            </motion.a>
           </div>
-        </div>
-
+        </motion.div>
         {/* Navigation */}
-        <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Navigation</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="/" className="hover:text-white transition">Accueil</a></li>
-            <li><a href="#services" className="hover:text-white transition">Services</a></li>
-            <li><a href="#pricing" className="hover:text-white transition">Tarifs</a></li>
-            <li><a href="#contact" className="hover:text-white transition">Contact</a></li>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.1 }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <h4 className="text-lg font-semibold text-white mb-5">Navigation</h4>
+          <ul className="space-y-3 text-sm">
+            <li>
+              <Link href="/" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Accueil
+              </Link>
+            </li>
+            <li>
+              <Link href="#services" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Services
+              </Link>
+            </li>
+            <li>
+              <Link href="#pricing" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Tarifs
+              </Link>
+            </li>
+            <li>
+              <Link href="#contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Contact
+              </Link>
+            </li>
           </ul>
-        </div>
-
+        </motion.div>
         {/* Ressources */}
-        <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Ressources</h4>
-          <ul className="space-y-2 text-sm">
-            <li><a href="#blog" className="hover:text-white transition">Blog</a></li>
-            <li><a href="#support" className="hover:text-white transition">Support</a></li>
-            <li><a href="#terms" className="hover:text-white transition">Conditions</a></li>
-            <li><a href="#privacy" className="hover:text-white transition">Confidentialité</a></li>
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <h4 className="text-lg font-semibold text-white mb-5">Ressources</h4>
+          <ul className="space-y-3 text-sm">
+            <li>
+              <Link href="#blog" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Blog
+              </Link>
+            </li>
+            <li>
+              <Link href="#support" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Support
+              </Link>
+            </li>
+            <li>
+              <Link href="#terms" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Conditions
+              </Link>
+            </li>
+            <li>
+              <Link href="#privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
+                Confidentialité
+              </Link>
+            </li>
           </ul>
-        </div>
-
+        </motion.div>
         {/* Newsletter */}
-        <div>
-          <h4 className="text-lg font-semibold text-white mb-4">Restez informé</h4>
-          <p className="text-sm text-gray-400 mb-4">
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6, delay: 0.3 }}
+          viewport={{ once: true, amount: 0.3 }}
+        >
+          <h4 className="text-lg font-semibold text-white mb-5">Restez informé</h4>
+          <p className="text-sm text-gray-400 mb-4 leading-relaxed">
             Recevez nos actualités et conseils tech directement par e-mail.
           </p>
           <form className="flex flex-col space-y-3">
-          
-            <button
+            <Input
+              type="email"
+              placeholder="Votre adresse e-mail"
+              className="bg-gray-800 border border-gray-700 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500"
+              name="email"
+              aria-label="Votre adresse e-mail"
+            />
+            <Button
               type="submit"
-              className="bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-md transition"
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-md transition-colors duration-200 shadow-md hover:shadow-lg"
             >
               S'inscrire
-            </button>
+            </Button>
           </form>
-        </div>
+        </motion.div>
       </div>
-
       {/* Bas de page */}
-      <div className="mt-12 border-t border-gray-700 pt-6 text-center text-sm text-gray-500">
-        &copy; {new Date().getFullYear()} TechAdvisory. Tous droits réservés.
+      <div className="mt-16 border-t border-gray-700 pt-8 text-center text-sm text-gray-500 relative z-10">
+        &copy; {currentYear} TechAdvisory. Tous droits réservés. {/* Utilisation de l'état currentYear */}
       </div>
     </footer>
-  );
+  )
 }
