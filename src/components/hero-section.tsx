@@ -178,7 +178,7 @@ export default function HeroSection() {
               />
             </Link>
             <Link
-              href="/chatbot"
+              href="/chat"
               className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-105"
             >
               <span className="relative z-10 flex items-center space-x-2">
@@ -194,7 +194,7 @@ export default function HeroSection() {
               />
             </Link>
             <Link
-              href="/contact"
+              href="/services"
               className="group flex items-center space-x-2 text-gray-300 hover:text-blue-400 font-medium text-lg transition-colors duration-200 px-4 py-2 rounded-full border border-gray-700 hover:border-blue-400"
             >
               <div className="w-10 h-10 bg-gray-800 rounded-full flex items-center justify-center group-hover:bg-blue-900 transition-colors">

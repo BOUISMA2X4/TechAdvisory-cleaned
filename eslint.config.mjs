@@ -11,32 +11,36 @@ const compat = new FlatCompat({
 
 const eslintConfig = [
   ...compat.extends("next/core-web-vitals"),
+
+  // ✅ Ajout du plugin
   {
+    plugins: {
+      "@typescript-eslint": require("@typescript-eslint/eslint-plugin"),
+    },
     rules: {
-      // Variables non utilisées : warning au lieu d'erreur
       "@typescript-eslint/no-unused-vars": [
-        "warn", // ou "off" pour complètement désactiver
+        "warn",
         {
-          "argsIgnorePattern": "^_",
-          "varsIgnorePattern": "^_",
-          "caughtErrorsIgnorePattern": "^_",
-          "destructuredArrayIgnorePattern": "^_"
-        }
+          argsIgnorePattern: "^_",
+          varsIgnorePattern: "^_",
+          caughtErrorsIgnorePattern: "^_",
+          destructuredArrayIgnorePattern: "^_",
+        },
       ],
-      // Expressions non utilisées : off pour les fichiers générés
-      "@typescript-eslint/no-unused-expressions": "warn", // ou "off"
+      "@typescript-eslint/no-unused-expressions": "warn",
       "@typescript-eslint/no-this-alias": "off",
       "@typescript-eslint/no-require-imports": "off",
     },
   },
+
+  // 🎯 Ignorer les fichiers générés
   {
-    // Règles spécifiques pour les fichiers générés
     files: [
       "src/generated/**/*",
-      "**/prisma/**/*", 
+      "**/prisma/**/*",
       "**/*.generated.*",
       "**/wasm*.js",
-      "**/runtime/**/*"
+      "**/runtime/**/*",
     ],
     rules: {
       "@typescript-eslint/no-unused-expressions": "off",
