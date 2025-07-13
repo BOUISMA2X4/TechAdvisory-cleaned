@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "next lint",
     "lint:check": "next lint",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "prisma:generate": "prisma generate",
+    "postinstall": "prisma generate"
   },
   "dependencies": {
     "@ai-sdk/google": "^1.2.22",
