@@ -3,7 +3,7 @@
 import { motion } from "framer-motion"
 import Image from "next/image"
 import Link from "next/link"
-import { GraduationCap, ProjectorIcon as ProjectDiagram, Cloud, Shield, Users, LineChart } from "lucide-react"
+import { GraduationCap, ProjectorIcon, Cloud, Shield, Users, LineChart } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/components/ui/card"
 
@@ -169,14 +169,14 @@ export default function EquipeProjetsPage() {
                     <Image
                       src={proj.image || "/placeholder.svg"}
                       alt={proj.title}
-                      layout="fill"
-                      objectFit="cover"
+                      fill // Use fill prop instead of layout="fill"
+                      style={{ objectFit: "cover" }} // Use style prop for objectFit
                       className="transition-transform duration-300 hover:scale-105"
                     />
                   </div>
                   <CardContent className="p-6 space-y-3">
                     <CardTitle className="text-xl font-semibold text-white flex items-center">
-                      <ProjectDiagram className="mr-2 text-blue-400 h-5 w-5 flex-shrink-0" />
+                      <ProjectorIcon className="mr-2 text-blue-400 h-5 w-5 flex-shrink-0" />
                       {proj.title}
                     </CardTitle>
                     <CardDescription className="text-sm text-gray-300 leading-relaxed">
@@ -207,9 +207,10 @@ export default function EquipeProjetsPage() {
             viewport={{ once: true, amount: 0.3 }}
             className="text-lg text-gray-300 max-w-3xl mx-auto leading-relaxed"
           >
-            Chez Nouvelle Technologie Advisory, nous croyons que le conseil ne se limite pas à donner des recommandations : il
-            s’agit de co-créer des solutions robustes, mesurables et durables. Que ce soit en IA, en Cloud Computing ou
-            en cybersécurité, chaque projet est une opportunité de bâtir un avenir plus performant.
+            Chez Nouvelle Technologie Advisory, nous croyons que le conseil ne se limite pas à donner des
+            recommandations : il s’agit de co-créer des solutions robustes, mesurables et durables. Que ce soit en IA,
+            en Cloud Computing ou en cybersécurité, chaque projet est une opportunité de bâtir un avenir plus
+            performant.
           </motion.p>
           <div className="flex justify-center gap-x-8 gap-y-4 pt-6 flex-wrap">
             <div className="flex items-center gap-2 text-blue-400 font-medium text-base">
@@ -249,7 +250,7 @@ export default function EquipeProjetsPage() {
             <Button
               asChild
               size="lg"
-              className="px-10 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-gradient-to-r from-green-500 to-teal-500 hover:shadow-green-500/30"
+              className="px-10 py-6 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300 rounded-full bg-gradient-to-r from-blue-500 to-cyan-500 hover:shadow-blue-500/30"
             >
               <Link href="/contact">Discutons ensemble de votre projet</Link>
             </Button>

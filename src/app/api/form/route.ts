@@ -1,52 +1,70 @@
 import { NextResponse } from "next/server"
-import { PrismaClient } from "@prisma/client"
+import { prisma } from "@/lib/prisma" // Utilisation de l'instance singleton de Prisma
+import { z } from "zod"
 
-const prisma = new PrismaClient()
+// Définition du schéma Zod pour la requête de rendez-vous
+const rendezvousSchema = z.object({
+  fullName: z.string().min(1, "Le nom complet est requis."),
+  email: z.string().email("L'adresse email n'est pas valide.").min(1, "L'email est requis."),
+  company: z.string().optional().nullable(), // Optionnel
+  position: z.string().optional().nullable(), // Optionnel
+  statut: z.string().min(1, "Le statut est requis."),
+  projectType: z.string().min(1, "Le type de projet est requis."),
+  preferredDate: z.string().refine(
+    (val) => {
+      // Valide que la chaîne peut être convertie en une date valide
+      const date = new Date(val)
+      return !isNaN(date.getTime())
+    },
+    {
+      message: "Le format de la date préférée est invalide.",
+    },
+  ),
+  preferredTime: z.string().min(1, "L'heure préférée est requise."),
+  message: z.string().optional().nullable(), // Optionnel
+})
 
 export async function POST(request: Request) {
   try {
     const body = await request.json()
+    const parsed = rendezvousSchema.safeParse(body)
 
-    if (
-      !body.fullName ||
-      !body.email ||
-      !body.statut ||
-      !body.projectType ||
-      !body.preferredDate ||
-      !body.preferredTime
-    ) {
-      return NextResponse.json({ message: "Champs requis manquants" }, { status: 400 })
+    if (!parsed.success) {
+      // Si la validation échoue, renvoyer une erreur 400 avec les détails de l'erreur
+      return NextResponse.json(
+        {
+          success: false,
+          error: "Données de requête invalides",
+          details: parsed.error.errors,
+        },
+        { status: 400 },
+      )
     }
 
-    // Vérification et conversion de la date pour s'assurer qu'elle est valide
-    const preferredDate = new Date(body.preferredDate)
-    if (isNaN(preferredDate.getTime())) {
-      return NextResponse.json({ message: "Format de date invalide" }, { status: 400 })
-    }
+    const { fullName, email, company, position, statut, projectType, preferredDate, preferredTime, message } =
+      parsed.data
+
+    // Conversion de la date validée en objet Date
+    const dateObject = new Date(preferredDate)
 
     const rendezvous = await prisma.rendezVous.create({
       data: {
-        fullName: body.fullName,
-        email: body.email,
-        company: body.company || null,
-        position: body.position || null,
-        statut: body.statut,
-        projectType: body.projectType,
-        preferredDate: preferredDate, // Utilisation de l'objet Date converti
-        preferredTime: body.preferredTime,
-        message: body.message || null,
+        fullName,
+        email,
+        company,
+        position,
+        statut,
+        projectType,
+        preferredDate: dateObject,
+        preferredTime,
+        message,
       },
     })
 
-    return NextResponse.json({ success: true, rendezvous }, { status: 200 }) // Ajout explicite du statut 200
+    return NextResponse.json({ success: true, rendezvous }, { status: 200 })
   } catch (error: any) {
-    // Spécifier le type 'any' pour accéder à 'message'
     console.error("[API ERROR] /api/rendezvous:", error)
-    // Pour le débogage, renvoyez le message d'erreur détaillé
     return NextResponse.json({ success: false, error: error.message || "Erreur serveur inconnue" }, { status: 500 })
-  } finally {
-    // Déconnexion de Prisma. En environnement serverless, cela peut être géré différemment
-    // pour optimiser les connexions, mais pour le débogage, c'est bien.
-    await prisma.$disconnect()
   }
+  // Pas besoin de prisma.$disconnect() ici dans un environnement Next.js/serverless
 }
