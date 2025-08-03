@@ -78,7 +78,7 @@ export default function CtaSection() {
               <span>Démarrer un projet</span>
             </Link>
             <Link
-              href="/chatbot"
+              href="/chat"
               className="group inline-flex items-center justify-center space-x-2 px-8 py-4 rounded-full font-semibold text-lg
                          border-2 border-white text-white shadow-lg
                          hover:bg-white hover:text-blue-700 hover:shadow-xl
