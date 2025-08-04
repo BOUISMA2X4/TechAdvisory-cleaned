@@ -1,18 +1,18 @@
-
-'use client'
-
+"use client"
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import clsx from "clsx"
-import { CuboidIcon as Cube, Menu, X, Sparkles, MessageCircle, Users, Phone, Home, Settings } from 'lucide-react'
-import { Button } from "@/components/ui/button" // Assuming shadcn Button is available
+import { CuboidIcon as Cube, Menu, X, Sparkles, Users, Phone, Home, Settings, MessageCircle } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useSession, signIn, signOut } from "next-auth/react"
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const [isScrolled, setIsScrolled] = useState(false)
   const pathname = usePathname()
+  const { data: session } = useSession()
 
   const links = [
     { name: "Accueil", href: "/", icon: Home },
@@ -30,7 +30,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll)
   }, [])
 
-  // Close mobile menu when route changes
   useEffect(() => {
     setIsOpen(false)
   }, [pathname])
@@ -45,7 +44,6 @@ export default function Navbar() {
       )}
     >
       <nav className="max-w-7xl mx-auto flex items-center justify-between px-4 py-3 md:px-6 md:py-4">
-        {/* Logo */}
         <Link href="/" className="flex items-center space-x-3 group">
           <div className="relative">
             <motion.div
@@ -65,8 +63,6 @@ export default function Navbar() {
             </p>
           </div>
         </Link>
-
-        {/* Desktop Navigation */}
         <ul className="hidden lg:flex items-center space-x-1">
           {links.map((link) => {
             const isActive = pathname === link.href
@@ -88,7 +84,6 @@ export default function Navbar() {
                     )}
                   />
                   <span>{link.name}</span>
-                  {/* Active indicator */}
                   {isActive && (
                     <motion.div
                       layoutId="activeTab"
@@ -102,26 +97,68 @@ export default function Navbar() {
             )
           })}
         </ul>
-
-        {/* CTA Button */}
         <div className="hidden md:flex items-center space-x-4">
-          <Button asChild className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-105">
-            <Link href="/chatbot">
+          {session ? (
+            <>
+              <Link href="/profile">
+                <Button className="group relative overflow-hidden bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-600/30 hover:scale-105">
+                  <span className="relative z-10 flex items-center space-x-2">
+                    <Users className="w-4 h-4" />
+                    <span>Mon Profil</span>
+                  </span>
+                  <motion.div
+                    className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600"
+                    initial={{ x: "100%" }}
+                    whileHover={{ x: "0%" }}
+                    transition={{ duration: 0.3 }}
+                  />
+                </Button>
+              </Link>
+              <Button
+                onClick={() => signOut()}
+                className="group relative overflow-hidden bg-red-600 to-red-700 text-white px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 hover:shadow-lg hover:shadow-red-600/30 hover:scale-105"
+              >
+                <span className="relative z-10 flex items-center space-x-2">
+                  <span>Déconnexion</span>
+                </span>
+              </Button>
+            </>
+          ) : (
+            <Button
+              onClick={() => signIn("google")}
+              className="group relative overflow-hidden bg-gray-800 text-white px-6 py-2.5 rounded-full font-medium text-sm transition-all duration-300 hover:shadow-lg hover:shadow-blue-500/30 hover:scale-105 border border-gray-700"
+            >
               <span className="relative z-10 flex items-center space-x-2">
-                <MessageCircle className="w-4 h-4" />
-                <span>Essayer l'IA</span>
+                <svg className="w-4 h-4" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    fill="#EA4335"
+                    d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.62-6.62C34.14 2.57 29.42 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C13.48 13.59 18.44 9.5 24 9.5z"
+                  />
+                  <path
+                    fill="#4285F4"
+                    d="M46.98 24c0-1.59-.18-3.19-.5-4.75H24v9.5h12.94c-.65 3.95-2.85 7.22-6.59 9.36l7.98 6.19C43.51 39.62 48 32.65 48 24z"
+                  />
+                  <path
+                    fill="#FBBC04"
+                    d="M10.53 28.38c-.78-2.35-.78-4.79 0-7.14L2.56 14.09C-.83 21.04-.83 26.96 2.56 33.91l7.97-5.53z"
+                  />
+                  <path
+                    fill="#34A853"
+                    d="M24 48c6.48 0 11.93-2.13 15.96-5.77l-7.98-6.19c-2.18 1.65-4.97 2.63-7.98 2.63-5.56 0-10.52-4.09-12.47-9.91L2.56 33.91C6.51 41.62 14.62 48 24 48z"
+                  />
+                  <path fill="none" d="M0 0h48v48H0z" />
+                </svg>
+                <span>S'inscrire avec Google</span>
               </span>
               <motion.div
-                className="absolute inset-0 bg-gradient-to-r from-purple-600 to-cyan-600"
+                className="absolute inset-0 bg-blue-500 opacity-0 group-hover:opacity-10 transition-opacity duration-300"
                 initial={{ x: "100%" }}
                 whileHover={{ x: "0%" }}
                 transition={{ duration: 0.3 }}
               />
-            </Link>
-          </Button>
+            </Button>
+          )}
         </div>
-
-        {/* Mobile Menu Button */}
         <Button
           variant="ghost"
           size="icon"
@@ -153,8 +190,6 @@ export default function Navbar() {
           </AnimatePresence>
         </Button>
       </nav>
-
-      {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
           <motion.div
@@ -198,19 +233,54 @@ export default function Navbar() {
                   </motion.div>
                 )
               })}
-              {/* Mobile CTA */}
               <motion.div
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: links.length * 0.05 + 0.1 }}
                 className="pt-4 border-t border-gray-800 mt-4"
               >
-                <Button asChild className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-full font-medium text-sm hover:shadow-lg transition-all duration-300">
-                  <Link href="/chatbot" onClick={() => setIsOpen(false)}>
-                    <MessageCircle className="w-4 h-4" />
-                    <span>Essayer l'Assistant IA</span>
-                  </Link>
-                </Button>
+                {session ? (
+                  <>
+                    <Link href="/profile">
+                      <Button className="flex items-center justify-center space-x-2 w-full bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-3 rounded-full font-medium text-sm hover:shadow-lg transition-all duration-300 mb-2">
+                        <Users className="w-4 h-4" />
+                        <span>Mon Profil</span>
+                      </Button>
+                    </Link>
+                    <Button
+                      onClick={() => signOut()}
+                      className="flex items-center justify-center space-x-2 w-full bg-red-600 text-white px-4 py-3 rounded-full font-medium text-sm hover:shadow-lg transition-all duration-300"
+                    >
+                      <span>Déconnexion</span>
+                    </Button>
+                  </>
+                ) : (
+                  <Button
+                    onClick={() => signIn("google")}
+                    className="flex items-center justify-center space-x-2 w-full bg-gray-800 text-white px-4 py-3 rounded-full font-medium text-sm hover:shadow-lg transition-all duration-300 border border-gray-700"
+                  >
+                    <svg className="w-4 h-4" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path
+                        fill="#EA4335"
+                        d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.62-6.62C34.14 2.57 29.42 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C13.48 13.59 18.44 9.5 24 9.5z"
+                      />
+                      <path
+                        fill="#4285F4"
+                        d="M46.98 24c0-1.59-.18-3.19-.5-4.75H24v9.5h12.94c-.65 3.95-2.85 7.22-6.59 9.36l7.98 6.19C43.51 39.62 48 32.65 48 24z"
+                      />
+                      <path
+                        fill="#FBBC04"
+                        d="M10.53 28.38c-.78-2.35-.78-4.79 0-7.14L2.56 14.09C-.83 21.04-.83 26.96 2.56 33.91l7.97-5.53z"
+                      />
+                      <path
+                        fill="#34A853"
+                        d="M24 48c6.48 0 11.93-2.13 15.96-5.77l-7.98-6.19c-2.18 1.65-4.97 2.63-7.98 2.63-5.56 0-10.52-4.09-12.47-9.91L2.56 33.91C6.51 41.62 14.62 48 24 48z"
+                      />
+                      <path fill="none" d="M0 0h48v48H0z" />
+                    </svg>
+                    <span>S'inscrire avec Google</span>
+                  </Button>
+                )}
               </motion.div>
             </div>
           </motion.div>
@@ -219,5 +289,3 @@ export default function Navbar() {
     </header>
   )
 }
-
-

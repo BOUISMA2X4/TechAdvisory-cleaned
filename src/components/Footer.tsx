@@ -1,28 +1,25 @@
 "use client"
-
-import { useState, useEffect } from "react" // Import useState and useEffect
+import { useState, useEffect } from "react"
 import { Linkedin, Twitter, Mail } from "lucide-react"
 import { motion } from "framer-motion"
 import Link from "next/link"
-import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { useSession } from "next-auth/react"
 
 export default function Footer() {
-  const [currentYear, setCurrentYear] = useState(2023) // Initialisez avec une année par défaut
+  const [currentYear, setCurrentYear] = useState(2023)
+  const { data: session } = useSession()
 
   useEffect(() => {
-    // Mettez à jour l'année uniquement côté client après l'hydratation
     setCurrentYear(new Date().getFullYear())
   }, [])
 
   const iconVariants = {
-    hover: { scale: 1.1, color: "#60A5FA" }, // Tailwind blue-400
+    hover: { scale: 1.1, color: "#60A5FA" },
     tap: { scale: 0.95 },
   }
 
   return (
     <footer className="bg-gradient-to-br from-gray-900 to-black text-gray-300 pt-16 pb-10 px-6 relative overflow-hidden">
-      {/* Subtle background pattern/gradient overlay */}
       <div className="absolute inset-0 opacity-10 pointer-events-none">
         <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
           <defs>
@@ -33,8 +30,7 @@ export default function Footer() {
           <rect width="100%" height="100%" fill="url(#grid)" className="text-gray-700" />
         </svg>
       </div>
-      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-12 relative z-10">
-        {/* Logo + Description */}
+      <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-12 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -83,7 +79,6 @@ export default function Footer() {
             </motion.a>
           </div>
         </motion.div>
-        {/* Navigation */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -98,7 +93,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#services" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/services" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Services
               </Link>
             </li>
@@ -108,13 +103,12 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#contact" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/contact" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Contact
               </Link>
             </li>
           </ul>
         </motion.div>
-        {/* Ressources */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -129,7 +123,7 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#support" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/support" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Support
               </Link>
             </li>
@@ -139,43 +133,15 @@ export default function Footer() {
               </Link>
             </li>
             <li>
-              <Link href="#privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="/privacy" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Confidentialité
               </Link>
             </li>
           </ul>
         </motion.div>
-        {/* Newsletter */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, delay: 0.3 }}
-          viewport={{ once: true, amount: 0.3 }}
-        >
-          <h4 className="text-lg font-semibold text-white mb-5">Restez informé</h4>
-          <p className="text-sm text-gray-400 mb-4 leading-relaxed">
-            Recevez nos actualités et conseils tech directement par e-mail.
-          </p>
-          <form className="flex flex-col space-y-3">
-            <Input
-              type="email"
-              placeholder="Votre adresse e-mail"
-              className="bg-gray-800 border border-gray-700 text-white placeholder:text-gray-500 focus:border-blue-500 focus:ring-blue-500"
-              name="email"
-              aria-label="Votre adresse e-mail"
-            />
-            <Button
-              type="submit"
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium py-2 rounded-md transition-colors duration-200 shadow-md hover:shadow-lg"
-            >
-              S'inscrire
-            </Button>
-          </form>
-        </motion.div>
       </div>
-      {/* Bas de page */}
       <div className="mt-16 border-t border-gray-700 pt-8 text-center text-sm text-gray-500 relative z-10">
-        &copy; {currentYear} TechAdvisory. Tous droits réservés. {/* Utilisation de l'état currentYear */}
+        &copy; {currentYear} TechAdvisory. Tous droits réservés.
       </div>
     </footer>
   )
