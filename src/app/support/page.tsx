@@ -19,7 +19,7 @@ import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
-import Header from "@/components/header"
+
 
 
 // Composant de séparateur réutilisable
@@ -93,7 +93,7 @@ export default function SupportPage() {
 
   return (
     <div className="relative flex flex-col min-h-[100dvh] overflow-hidden bg-[#1a1a1a] text-white grid-background">
-      <Header />
+     
       <main className="flex-1 relative z-10 bg-gray-950">
         {/* Hero Section */}
         <section className="w-full py-24 md:py-36 lg:py-48 xl:py-60 flex flex-col items-center justify-center text-center relative overflow-hidden">

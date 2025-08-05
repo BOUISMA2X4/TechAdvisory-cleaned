@@ -118,7 +118,7 @@ export default function Footer() {
           <h4 className="text-lg font-semibold text-white mb-5">Ressources</h4>
           <ul className="space-y-3 text-sm">
             <li>
-              <Link href="#blog" className="text-gray-400 hover:text-white transition-colors duration-200">
+              <Link href="blog" className="text-gray-400 hover:text-white transition-colors duration-200">
                 Blog
               </Link>
             </li>
